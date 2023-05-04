@@ -9,6 +9,9 @@ export class WebService {
    private discussionID : any;
 
    private commentID : any;
+   
+   private journalID :any;
+
 
    constructor(private http: HttpClient) { }
 
@@ -25,7 +28,7 @@ export class WebService {
       return this.http.get<any>('assets/sentiment_analysis.json');
     }
 
-   getDiscussions(page:number){
+    getDiscussions(page:number){
       return this.http.get('http://127.0.0.1:5000/api/v1.0/discussion?pn=' + page);
    }
 
@@ -87,4 +90,24 @@ export class WebService {
       this.commentID = comment;
       return this.http.delete('http://127.0.0.1:5000/api/v1.0/discussion/' + this.discussionID + '/comments/' + comment);
    }
+
+   getCount(): Observable<number> {
+      return this.http.get<number>('http://127.0.0.1:5000/api/v1.0/home');
+    }
+   
+   postJournal(journal: any){
+      let postData = new FormData();
+      postData.append("title", journal.title);
+      postData.append("content", journal.content);
+
+      return this.http.post('http://127.0.0.1:5000/api/v1.0/journal' , postData);
+   }
+
+   createJournal(journalData: any): Observable<any> {
+      return this.http.post('http://127.0.0.1:5000/api/v1.0/journal', journalData);
+    }
+  
+    getJournals(page:number): Observable<any> {
+      return this.http.get('http://127.0.0.1:5000/api/v1.0/journal?pn=' + page);
+    }
 }
